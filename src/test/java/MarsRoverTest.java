@@ -1,24 +1,30 @@
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 
 public class MarsRoverTest {
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
     @Test
     public void should_new_mars_rover_with_area() {
-        MarsRover marsRover = new MarsRover(5, 5);
+        MarsRover marsRover = new MarsRover(new Area(5, 5));
         assertThat(marsRover).isNotNull();
     }
 
     @Test
     public void should_land_mars_rover() {
-        MarsRover marsRover = new MarsRover(5, 5);
+        MarsRover marsRover = new MarsRover(new Area(5, 5));
         marsRover.land(3, 3, 'E');
         assertThat(marsRover.getPosition()).isEqualTo("33E");
     }
 
     @Test
     public void should_move_forward() {
-        MarsRover marsRover = new MarsRover(5, 5);
+        MarsRover marsRover = new MarsRover(new Area(5, 5));
         marsRover.land(3, 3, 'E');
 
         marsRover.moveForward();
@@ -39,7 +45,7 @@ public class MarsRoverTest {
 
     @Test
     public void should_move_back() {
-        MarsRover marsRover = new MarsRover(5, 5);
+        MarsRover marsRover = new MarsRover(new Area(5, 5));
         marsRover.land(3, 3, 'E');
 
         marsRover.moveBack();
@@ -60,7 +66,7 @@ public class MarsRoverTest {
 
     @Test
     public void should_turn_left() {
-        MarsRover marsRover = new MarsRover(5, 5);
+        MarsRover marsRover = new MarsRover(new Area(5, 5));
         marsRover.land(3, 3, 'E');
 
         marsRover.turnLeft();
@@ -78,7 +84,7 @@ public class MarsRoverTest {
 
     @Test
     public void should_turn_right() {
-        MarsRover marsRover = new MarsRover(5, 5);
+        MarsRover marsRover = new MarsRover(new Area(5, 5));
         marsRover.land(3, 3, 'E');
 
         marsRover.turnRight();
@@ -92,5 +98,13 @@ public class MarsRoverTest {
 
         marsRover.turnRight();
         assertThat(marsRover.getPosition()).isEqualTo("33E");
+    }
+
+    @Test
+    public void should_not_land_out_of_area() {
+        expectedException.expect(IllegalStateException.class);
+        expectedException.expectMessage("Coordinate 6,6 is out of area 5x5");
+        MarsRover marsRover = new MarsRover(new Area(5, 5));
+        marsRover.land(6, 6, 'E');
     }
 }
