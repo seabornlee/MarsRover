@@ -1,7 +1,9 @@
+import static java.lang.String.valueOf;
+
 public class MarsRover {
     private int x;
     private int y;
-    private char faceTo;
+    private Direction direction;
 
     public MarsRover(int x, int y) {
 
@@ -10,78 +12,30 @@ public class MarsRover {
     public void land(int x, int y, char faceTo) {
         this.x = x;
         this.y = y;
-        this.faceTo = faceTo;
+        direction = Direction.valueOf(valueOf(faceTo).toUpperCase());
     }
 
     public String getPosition() {
-        return String.valueOf(this.x) + this.y + this.faceTo;
+        return valueOf(this.x) + this.y + direction;
     }
 
     public void moveForward() {
-        switch (faceTo) {
-            case 'E':
-                this.x++;
-                break;
-            case 'W':
-                this.x--;
-                break;
-            case 'N':
-                this.y++;
-                break;
-            case 'S':
-                this.y--;
-                break;
-        }
+        Offest offset = direction.forwardOffset();
+        this.x += offset.x;
+        this.y += offset.y;
     }
 
     public void moveBack() {
-        switch (faceTo) {
-            case 'E':
-                this.x--;
-                break;
-            case 'W':
-                this.x++;
-                break;
-            case 'N':
-                this.y--;
-                break;
-            case 'S':
-                this.y++;
-                break;
-        }
+        Offest offset = direction.backwardOffset();
+        this.x += offset.x;
+        this.y += offset.y;
     }
 
     public void turnLeft() {
-        switch (faceTo) {
-            case 'E':
-                this.faceTo = 'N';
-                break;
-            case 'W':
-                this.faceTo = 'S';
-                break;
-            case 'N':
-                this.faceTo = 'W';
-                break;
-            case 'S':
-                this.faceTo = 'E';
-                break;
-        }
+        this.direction = direction.left();
     }
 
     public void turnRight() {
-        switch (faceTo) {
-            case 'E':
-                this.faceTo = 'S';
-                break;
-            case 'W':
-                this.faceTo = 'N';
-                break;
-            case 'N':
-                this.faceTo = 'E';
-                break;
-            case 'S':
-                this.faceTo = 'W';
-                break;
-        }
+        this.direction = direction.right();
     }
 }
